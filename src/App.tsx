@@ -1,16 +1,31 @@
 import { lazy, useState, Suspense } from "react";
 import reactLogo from "./assets/react.svg";
-import "./App.css";
 import { Link, Outlet, Route, Routes } from "react-router-dom";
-// import { Home } from "./pages/Home";
-import { About } from "./pages/About";
-import { Store } from "./pages/Store";
-// React.lazy()
-const Home = lazy(() => import("./pages/Home"));
+import { lazyLoad } from "./utils/lazyLoad";
+import "./App.css";
+
+
+// const Home = lazy(() => import("./pages/Home")); // default lazy
+// const About = lazy(() =>
+//   import("./pages/About").then((module) => {
+//     return { default: module.About };
+//   })
+// ); not default 
+
+// const About2 = lazy(() =>
+//   import("./pages/About").then((module) => {
+//     return { default: module.About2 };
+//   })
+// );
+
+
+const Home = lazyLoad("../pages/Home") // default
+const About = lazyLoad("../pages/About",'About') // not default 
+const Store = lazyLoad("../pages/Store",'Store')
+
+
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <Routes>
       <Route>
@@ -32,7 +47,7 @@ function NavWrapper() {
         <Link to="/store">Store</Link>
         <Link to="/about">About</Link>
       </nav>
-      <Suspense>
+      <Suspense fallback={<h2>Loading...</h2>}>
         <Outlet />
       </Suspense>
     </>
